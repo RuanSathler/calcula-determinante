@@ -4,17 +4,23 @@ class Main{
 		Matriz mat1;
 		int det;
 		long inicio, fim, resultado;	
-
-		mat1 = new Matriz(7,7);
+		int ordem;
+		ordem= 9;
+		mat1 = new Matriz(ordem, ordem);
 		mat1.inicializaRandomico();
+
+		mat1.AchaColunaComMainZero();
+		mat1.AchaLinhaComMainZero();
 		
 		mat1.imprime();
-		inicio = System.currentTimeMillis();
+		inicio = System.nanoTime();
 		det = mat1.determinante();
-		fim = System.currentTimeMillis();
+		fim = System.nanoTime();
 		resultado = fim - inicio;
 		System.out.println(det);
 		System.out.println(resultado);
+		mat1.AchaColunaComMainZero();
+		mat1.AchaLinhaComMainZero();
 		
 		
 		/*
