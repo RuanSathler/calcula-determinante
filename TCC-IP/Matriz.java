@@ -94,7 +94,7 @@ class Matriz{
 		Random gerador = new Random();
 		for(conti = 0; conti < this.getTamanhoLinha(); conti++){
 			for(contj = 0; contj < this.getTamanhoColuna(); contj++){
-				novoValor = gerador.nextInt(ordem*3);
+				novoValor = gerador.nextInt(ordem*ordem);
 				this.setValor(conti,contj,novoValor);
 			}
 		}
