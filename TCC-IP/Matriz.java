@@ -1,6 +1,6 @@
 import java.util.Random;
 
-class Matriz{
+public class Matriz{
 	private int[][] mat;
 	private int tamLinha;
 	private int tamColuna;
@@ -25,31 +25,31 @@ class Matriz{
 		mat = new int[this.getTamanhoLinha()][this.getTamanhoColuna()];
 	}
 
-	public void setColunaComMainZeros(int tempColuna){
+	private void setColunaComMainZeros(int tempColuna){
 		this.ColunaComMainZero = tempColuna;
 	}
-	public int getColunaComMaiszeros(){
+	private int getColunaComMaiszeros(){
 		return this.ColunaComMainZero;
 	}
 
-	public void setLinhaComMaisZeros(int tempLinha){
+	private void setLinhaComMaisZeros(int tempLinha){
 		this.linhaComMaisZero = tempLinha;
 	}
 	public int getLinhaComMaisZeros(){
 		return this.linhaComMaisZero;
 	}
 
-	public void setZerosColuna(int tempZerosColuna){
+	private void setZerosColuna(int tempZerosColuna){
 		this.zerosColuna = tempZerosColuna;
 	}
-	public int getZerosColuna(){
+	private int getZerosColuna(){
 		return this.zerosColuna;
 	}
 
-	public void setZerosLinha(int tempZerosLinha){
+	private void setZerosLinha(int tempZerosLinha){
 		this.zerosLinha = tempZerosLinha;
 	}
-	public int getZerosLinha(){
+	private int getZerosLinha(){
 		return this.zerosLinha;
 	}
 
@@ -85,7 +85,7 @@ class Matriz{
 				System.out.print(this.getValor(conti,contj) + " ");
 			}
 		}
-		System.out.println();	
+		System.out.println("\n");	
 	}
 
 	public void inicializaRandomico(){
@@ -136,7 +136,7 @@ class Matriz{
 		return sinal;		
 	}
 
-	public void copiaMatrizMaiorParaMenor(Matriz maior,Matriz menor,int isqn,int jsqn){
+	private void copiaMatrizMaiorParaMenor(Matriz maior,Matriz menor,int isqn,int jsqn){
 		int contAi,contAj,contBi,contBj,temp;
 
 		contAi = 0;
@@ -157,6 +157,24 @@ class Matriz{
 		}
 	}
 
+	private int detOrdemN(Matriz mat){
+		int sinal,cofator,detTemp,resposta,contC,numL,numC;
+		Matriz matmenor;
+		numL = this.getTamanhoLinha();
+		numC = this.getTamanhoColuna();
+		
+		resposta = 0;
+		for(contC = 0; contC < mat.getTamanhoColuna(); contC++){
+			cofator = mat.getValor(0,contC);
+			sinal = this.calculaSinal(0,contC);
+			matmenor = new Matriz(numL-1,numC-1);
+			this.copiaMatrizMaiorParaMenor(mat,matmenor,0,contC);
+			detTemp = matmenor.determinante();
+			resposta = resposta + (cofator * sinal * detTemp);
+		}
+		return (resposta);
+	}
+
 	public int determinante(){
 		int ordem,det;
 
@@ -165,13 +183,12 @@ class Matriz{
 
 		if(ordem > 0){
 			switch (ordem) {
-			    case 1:  det = this.detOrdem1(this);;
+			    case 1: det = this.detOrdem1(this);
 					break;
-			    case 2:  det = this.detOrdem2(this);;
-				    break;
-			    default:det = this.detOrdemN(this);;
-				    break;
-
+			    case 2: det = this.detOrdem2(this);
+					break;
+			    default: det = this.detOrdemN(this);				
+					break;
 			}
 			
 		}
@@ -183,19 +200,45 @@ class Matriz{
 	}
 
 	//inicio dos incrementos
-	private int detOrdemN(Matriz mat){
+	public int determinanteComIncremento(){
+		int ordem,det;
+
+		ordem = this.retorneOrdem();
+		det = 0;
+
+		if(ordem > 0){
+			switch (ordem) {
+			    case 1: det = this.detOrdem1(this);
+					break;
+			    case 2: det = this.detOrdem2(this);
+					break;
+			    default: det = this.detOrdemNComIncremento(this);				
+					break;
+			}
+			
+		}
+		else{
+			System.out.println("Matriz nao eh quadrada!! retornando 0");
+		}
+
+		return det;
+	}
+
+	private int detOrdemNComIncremento(Matriz mat){
 		int sinal,cofator,detTemp,resposta,contC,contL;
 		Matriz matmenor;
 		
+		this.AchaColunaComMainZero();
+		this.AchaLinhaComMainZero();
+
 		resposta = 0;
 		if (this.LinhaOUcoluna()) {
 			for(contC = 0; contC < mat.getTamanhoColuna(); contC++){
-				cofator = mat.getValor(this.linhaComMaisZero,contC);
-
+				cofator = mat.getValor(this.getLinhaComMaisZeros(),contC);
 				if(cofator!=0){
-					sinal = this.calculaSinal(this.linhaComMaisZero,contC);
+					sinal = this.calculaSinal(this.getLinhaComMaisZeros(),contC);
 					matmenor = new Matriz(this.getTamanhoLinha()-1,this.getTamanhoColuna()-1);
-					this.copiaMatrizMaiorParaMenor(mat,matmenor,this.linhaComMaisZero,contC);
+					this.copiaMatrizMaiorParaMenor(mat,matmenor,this.getLinhaComMaisZeros(),contC);
 					detTemp = matmenor.determinante();
 					resposta = resposta + (cofator * sinal * detTemp);
 				}
@@ -203,12 +246,11 @@ class Matriz{
 		}
 		else{
 			for(contL = 0; contL < mat.getTamanhoLinha(); contL++){
-				cofator = mat.getValor(contL,this.ColunaComMainZero);
-
+				cofator = mat.getValor(contL,this.getColunaComMaiszeros());
 				if(cofator!=0){
-					sinal = this.calculaSinal(contL,this.ColunaComMainZero);
+					sinal = this.calculaSinal(contL,this.getColunaComMaiszeros());
 					matmenor = new Matriz(this.getTamanhoLinha()-1,this.getTamanhoColuna()-1);
-					this.copiaMatrizMaiorParaMenor(mat,matmenor,contL,this.ColunaComMainZero);
+					this.copiaMatrizMaiorParaMenor(mat,matmenor,contL,this.getColunaComMaiszeros());
 					detTemp = matmenor.determinante();
 					resposta = resposta + (cofator * sinal * detTemp);
 				}
@@ -217,7 +259,7 @@ class Matriz{
 		return (resposta);
 	}
 
-	public void AchaColunaComMainZero(){
+	private void AchaColunaComMainZero(){
 		int contC,contL, somatorio;
 		somatorio = 0;
 		for(contC = 0; contC < this.getTamanhoColuna(); contC++){
@@ -235,7 +277,7 @@ class Matriz{
 
 	}
 
-	public void AchaLinhaComMainZero(){
+	private void AchaLinhaComMainZero(){
 		int contC,contL, somatorio;
 		somatorio = 0;
 		for(contL = 0; contL < this.getTamanhoLinha(); contL++){
@@ -252,9 +294,9 @@ class Matriz{
 		}
 	}
 
-	public boolean LinhaOUcoluna(){
+	private boolean LinhaOUcoluna(){
 		boolean chave;
-		if(this.zerosLinha>this.zerosColuna){
+		if(this.getLinhaComMaisZeros()>this.getColunaComMaiszeros()){
 			chave = true;
 		}
 		else{
