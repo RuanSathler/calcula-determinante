@@ -1,49 +1,44 @@
+import java.util.Scanner;
 class Main{
 	public static void main(String[] args){
 		Matriz mat1;
-		int det;
-		long inicio, fim, resultado;	
+		int det, ordem;
+		long inicio, fim, resultadoAlgo1, resultadoAlgo2;	
+		Scanner ler = new Scanner(System.in);
 
-		mat1 = new Matriz(3, 3);
-		mat1.inicializaRandomico();
+		System.out.println("ola, para testar o codigo apenas digite a ordem da matriz que vc deseja calcula");
+		System.out.println("caso queria encerrar o programa digite 0 e de enter");
+		System.out.println("digite a ordem da matriz:");
+		ordem = ler.nextInt();
 
-		mat1.AchaColunaComMainZero();
-		mat1.AchaLinhaComMainZero();
-		
-		mat1.imprime();
-		inicio = System.nanoTime();
-		det = mat1.determinante();
-		fim = System.nanoTime();
-		resultado = fim - inicio;
-		System.out.println(det);
-		System.out.println(resultado);
-
-		mat1.AchaColunaComMainZero();
-		mat1.AchaLinhaComMainZero();
-
-		
-		
-		/*
-		
-		array com as ordens [3,5,7,9,11,13]
-		
-		enquanto tiver ordem no array faca
-			ordemMatriz = ordemDaVez
+		while (ordem !=0) {		
 			
-		 	para cada ordem faca
-		 		cria a matriz com a ordem
-		 		para cara repeticao faca	
-		 			inicializa randomicamente com a ordem	
-		 			calculaDet com metodoBase
-		 			calculaDet com otimiV1
-		 			calculaDet com otimiV2
-		 		fim-para
-		 	fim-para	
-		 		
+			mat1 = new Matriz(ordem, ordem);
+			mat1.inicializaRandomico();
+			mat1.imprime();
+			
+			inicio = System.nanoTime();
+			det = mat1.determinante();
+			fim = System.nanoTime();
+			resultadoAlgo1 = fim - inicio;
+			System.out.println("codigo sem melhoria");
+			System.out.println(det);
+			System.out.println(resultadoAlgo1);
 
-		*/
+			System.out.println();
+		
+			inicio = System.nanoTime();
+			det = mat1.determinanteComIncremento();
+			fim = System.nanoTime();
+			resultadoAlgo2 = fim - inicio;
+			System.out.println("codigo com melhoria");
+			System.out.println(det);		
+			System.out.println(resultadoAlgo2);
 
-
+			System.out.println("o algoritimo com melhoria foi mais rapido em: "+(resultadoAlgo1-resultadoAlgo2)+" nano segundos");
+			System.out.println("digite a ordem da matriz a ser testada:");
+			ordem = ler.nextInt();
+		}
+		ler.close();
 	}
-
 }
